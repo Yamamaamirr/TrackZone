@@ -50,7 +50,7 @@ const EntryDetails = () => {
                     Characteristics
                 </h2>
                 <img
-                    src="src/assets/images/TrackZone_Logo.webp"
+                    src="TrackZone_Logo.webp"
                     alt="TrackZone Logo"
                     className="h-5 sm:h-7"
                 />
@@ -146,7 +146,7 @@ const CountDetails = () => {
                     Count Details
                 </h2>
                 <img
-                    src="src/assets/images/TrackZone_Logo.webp"
+                    src="TrackZone_Logo.webp"
                     alt="TrackZone Logo"
                     className="h-5 sm:h-7"
                 />
