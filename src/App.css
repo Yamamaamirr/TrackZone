@@ -1,0 +1,9 @@
+/* Add this CSS to your styles (e.g., in App.css or a dedicated CSS file) */
+.map-container {
+    position: relative; /* This ensures the map is positioned correctly */
+    width: 100%; /* Full width of its container */
+    height: calc(100vh - 64px); /* Adjust height according to horizontal navbar */
+  }
+  
+  /* Ensure to adjust the height value based on the actual height of your horizontal navbar */
+  
