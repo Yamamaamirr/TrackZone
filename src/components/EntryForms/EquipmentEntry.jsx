@@ -36,9 +36,8 @@ const InputField = ({ label }) => {
       </div>
     );
 };
-
 // Entry Details Component for the Characteristics Tab
-const EntryDetails = () => {
+const EntryDetails = ({ setActiveTab }) => {
     const vehicleTypes = ["Car", "Truck", "Van", "Motorcycle"];
     const fuelTypes = ["Gasoline", "Diesel", "Electric", "Hybrid"];
     const transmissionTypes = ["Automatic", "Manual", "CVT", "Semi-Automatic"];
@@ -93,7 +92,10 @@ const EntryDetails = () => {
             {/* Submit Button at Bottom Right */}
             <div className="absolute bottom-4 right-4">
                 <div className="w-24 mt-2"> {/* Fixed width container */}
-                    <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-3 sm:py-2 sm:px-4 text-xs sm:text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    <button
+                        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-3 sm:py-2 sm:px-4 text-xs sm:text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        onClick={() => setActiveTab('count')} // Trigger tab switch
+                    >
                         Next
                     </button>
                 </div>
@@ -101,11 +103,14 @@ const EntryDetails = () => {
         </div>
     );
 };
-const CountDetails = () => {
+
+const CountDetails = ({ setActiveTab }) => {
     const [debutDate, setDebutDate] = useState(""); // State for the debut date
     const [status, setStatus] = useState("Active"); // State for the dropdown
-    const [isInputVisible, setInputVisible] = useState(false); // State to manage input visibility
+    const [isInputVisible, setInputVisible] = useState(false); // State to manage meter input visibility
+    const [isAdditionalInputVisible, setAdditionalInputVisible] = useState(false); // State for additional input visibility
     const [isMobile, setIsMobile] = useState(false); // State to manage screen size
+    const [openSection, setOpenSection] = useState(null); // Track which section is open ('meter' or 'additional')
 
     const handleDateChange = (event) => {
         setDebutDate(event.target.value);
@@ -115,8 +120,24 @@ const CountDetails = () => {
         setStatus(event.target.value);
     };
 
-    const toggleInputVisibility = () => {
-        setInputVisible(!isInputVisible);
+    // Function to toggle Meter section
+    const toggleMeterVisibility = () => {
+        if (openSection === 'meter') {
+            setOpenSection(null); // Close if it's already open
+        } else {
+            setOpenSection('meter'); // Open meter section
+            setAdditionalInputVisible(false); // Ensure additional inputs are closed
+        }
+    };
+
+    // Function to toggle Additional Inputs section
+    const toggleAdditionalInputVisibility = () => {
+        if (openSection === 'additionalInputs') {
+            setOpenSection(null); // Close if it's already open
+        } else {
+            setOpenSection('additionalInputs'); // Open additional inputs section
+            setInputVisible(false); // Ensure meter section is closed
+        }
     };
 
     // Effect to set default visibility based on window size
@@ -173,30 +194,30 @@ const CountDetails = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className="border border-gray-300 p-1 min-h-[30px] sm:min-h-[40px]">
-                                <input
-                                    type="text"
-                                    className="rounded-md p-1 text-[9px] sm:text-xs w-full border-none"
-                                    placeholder="Enter Phone Number"
-                                />
-                            </td>
-                            <td className="border border-gray-300 p-1 min-h-[30px] sm:min-h-[40px]">
-                                <input
-                                    type="text"
-                                    className="rounded-md p-1 text-[9px] sm:text-xs w-full border-none"
-                                    placeholder="Enter IMEI"
-                                />
-                            </td>
-                            <td className="border border-gray-300 p-1 min-h-[30px] sm:min-h-[40px]">
-                                <input
-                                    type="date"
-                                    value={debutDate}
-                                    onChange={handleDateChange}
-                                    className="rounded-md p-1 text-[9px] sm:text-xs w-full border-none"
-                                />
-                            </td>
-                        </tr>
+                    <tr>
+    <td className="border border-gray-300 p-1 min-h-[30px] sm:min-h-[40px]">
+        <input
+            type="text"
+            className="rounded-md p-1 text-[9px] sm:text-xs w-full border-none focus:outline-none focus:ring-0"
+            placeholder="Enter Phone Number"
+        />
+    </td>
+    <td className="border border-gray-300 p-1 min-h-[30px] sm:min-h-[40px]">
+        <input
+            type="text"
+            className="rounded-md p-1 text-[9px] sm:text-xs w-full border-none focus:outline-none focus:ring-0"
+            placeholder="Enter IMEI"
+        />
+    </td>
+    <td className="border border-gray-300 p-1 min-h-[30px] sm:min-h-[40px]">
+        <input
+            type="date"
+            value={debutDate}
+            onChange={handleDateChange}
+            className="rounded-md p-1 text-[9px] sm:text-xs w-full border-none focus:outline-none focus:ring-0"
+        />
+    </td>
+</tr>
                     </tbody>
                 </table>
             </div>
@@ -220,74 +241,148 @@ const CountDetails = () => {
                 </select>
             </div>
 
-            {/* Collapsible Section for Additional Inputs */}
+            {/* Collapsible Section for Meter Inputs */}
             <div className="pl-4 pt-2 flex items-center">
                 <h3 className="text-[10px] sm:text-xs font-medium text-gray-700 mb-1">
-                    Meter
+                    Kms Logged
                 </h3>
                 {/* Show the toggle icon only on mobile */}
                 {isMobile && (
-                    <button onClick={toggleInputVisibility} className="focus:outline-none ml-2">
+                    <button onClick={toggleMeterVisibility} className="focus:outline-none ml-2">
                         <FontAwesomeIcon 
-                            icon={isInputVisible ? faAngleUp : faAngleDown} 
-                            className="text-[10px] sm:text-[12px] transform -translate-y-1" // Reduced size and slightly moved up
+                            icon={openSection === ' Kms Logged' ? faAngleUp : faAngleDown} 
+                            className="text-[10px] sm:text-[12px] transform -translate-y-1"
                         />
                     </button>
                 )}
             </div>
 
-            {/* Display inputs based on isMobile state */}
-            {(isMobile ? isInputVisible : true) && (
-                <div className="flex flex-wrap justify-between mt-2 mx-4">
-                    <div className="flex flex-col items-start mx-2 mb-2 w-full sm:w-[48%] md:w-[23%]">
-                        <label className="text-[9px] sm:text-xs font-medium text-gray-700 mb-1" htmlFor="input-1">
-                            Input 1
-                        </label>
-                        <input
-                            type="text"
-                            id="input-1"
-                            className="border border-gray-300 rounded-md p-1 text-[9px] sm:text-xs w-full"
-                            placeholder="Enter Input 1"
-                        />
-                    </div>
-                    <div className="flex flex-col items-start mx-2 mb-2 w-full sm:w-[48%] md:w-[23%]">
-                        <label className="text-[9px] sm:text-xs font-medium text-gray-700 mb-1" htmlFor="input-2">
+            <div className="max-h-[400px] overflow-y-auto">
+                {(isMobile ? openSection === 'meter' : true) && (
+                    <div className="flex flex-wrap justify-between mt-2 mx-4">
+                        <div className="flex flex-col items-start mx-2 mb-2 w-full sm:w-[48%] md:w-[23%]">
+                            <label className="text-[9px] sm:text-xs font-medium text-gray-700 mb-1" htmlFor="input-1">
+                                Kms
+                            </label>
+                            <input
+                                type="text"
+                                id="input-1"
+                                className="border border-gray-300 rounded-md p-1 text-[9px] sm:text-xs w-full"
+                                placeholder="Enter Input 1"
+                            />
+                        </div>
+                        <div className="flex flex-col items-start mx-2 mb-2 w-full sm:w-[48%] md:w-[23%]">
+                            <label className="text-[9px] sm:text-xs font-medium text-gray-700 mb-1" htmlFor="input-2">
+                                Date and Time
+                            </label>
+                            <input
+                                type="datetime-local"
+                                id="input-2"
+                                className="border border-gray-300 rounded-md p-1 text-[9px] sm:text-xs w-full"
+                            />
+                        </div>
+                        <div className="flex flex-col items-start mx-2 mb-2 w-full sm:w-[48%] md:w-[23%]">
+                            <label className="text-[9px] sm:text-xs font-medium text-gray-700 mb-1" htmlFor="input-3">
+                              Estimate
+                            </label>
+                            <input
+                                type="text"
+                                id="input-3"
+                                className="border border-gray-300 rounded-md p-1 text-[9px] sm:text-xs w-full"
+                                placeholder="Enter Input 3"
+                            />
+                        </div>
+                        <div className="flex flex-col items-start mx-2 mb-2 w-full sm:w-[48%] md:w-[23%]">
+                            <label className="text-[9px] sm:text-xs font-medium text-gray-700 mb-1" htmlFor="input-4">
                             Date and Time
-                        </label>
-                        <input
-                            type="datetime-local"
-                            id="input-2"
-                            className="border border-gray-300 rounded-md p-1 text-[9px] sm:text-xs w-full"
-                        />
+
+                            </label>
+                            <input
+                                type="datetime-local"
+                                id="input-4"
+                                className="border border-gray-300 rounded-md p-1 text-[9px] sm:text-xs w-full"
+                            />
+                        </div>
                     </div>
-                    <div className="flex flex-col items-start mx-2 mb-2 w-full sm:w-[48%] md:w-[23%]">
-                        <label className="text-[9px] sm:text-xs font-medium text-gray-700 mb-1" htmlFor="input-3">
-                            Input 3
-                        </label>
-                        <input
-                            type="text"
-                            id="input-3"
-                            className="border border-gray-300 rounded-md p-1 text-[9px] sm:text-xs w-full"
-                            placeholder="Enter Input 3"
+                )}
+            </div>
+
+            {/* Collapsible Section for Additional Inputs */}
+            <div className="pl-4 pt-2 flex items-center">
+                <h3 className="text-[10px] sm:text-xs font-medium text-gray-700 mb-1">
+                  Hours Logged
+                </h3>
+                {/* Show the toggle icon only on mobile */}
+                {isMobile && (
+                    <button onClick={toggleAdditionalInputVisibility} className="focus:outline-none ml-2">
+                        <FontAwesomeIcon 
+                            icon={openSection === 'additionalInputs' ? faAngleUp : faAngleDown} 
+                            className="text-[10px] sm:text-[12px] transform -translate-y-1"
                         />
+                    </button>
+                )}
+            </div>
+
+            <div className="max-h-[400px] overflow-y-auto">
+                {(isMobile ? openSection === 'additionalInputs' : true) && (
+                    <div className="flex flex-wrap justify-between mt-2 mx-4">
+                        <div className="flex flex-col items-start mx-2 mb-2 w-full sm:w-[48%] md:w-[23%]">
+                            <label className="text-[9px] sm:text-xs font-medium text-gray-700 mb-1" htmlFor="additional-input-1">
+                               Hours
+                            </label>
+                            <input
+                                type="text"
+                                id="additional-input-1"
+                                className="border border-gray-300 rounded-md p-1 text-[9px] sm:text-xs w-full"
+                                placeholder="Enter Additional Input 1"
+                            />
+                        </div>
+                        <div className="flex flex-col items-start mx-2 mb-2 w-full sm:w-[48%] md:w-[23%]">
+                            <label className="text-[9px] sm:text-xs font-medium text-gray-700 mb-1" htmlFor="additional-input-2">
+                                 Date and Time
+                            </label>
+                            <input
+                                type="datetime-local"
+                                id="additional-input-2"
+                                className="border border-gray-300 rounded-md p-1 text-[9px] sm:text-xs w-full"
+                            />
+                        </div>
+                        <div className="flex flex-col items-start mx-2 mb-2 w-full sm:w-[48%] md:w-[23%]">
+                            <label className="text-[9px] sm:text-xs font-medium text-gray-700 mb-1" htmlFor="additional-input-3">
+                               Estimate
+                            </label>
+                            <input
+                                type="text"
+                                id="additional-input-3"
+                                className="border border-gray-300 rounded-md p-1 text-[9px] sm:text-xs w-full"
+                                placeholder="Enter Additional Input 3"
+                            />
+                        </div>
+                        <div className="flex flex-col items-start mx-2 mb-2 w-full sm:w-[48%] md:w-[23%]">
+                            <label className="text-[9px] sm:text-xs font-medium text-gray-700 mb-1" htmlFor="additional-input-4">
+                            Date and Time
+                            </label>
+                            <input
+                                type="datetime-local"
+                                id="additional-input-4"
+                                className="border border-gray-300 rounded-md p-1 text-[9px] sm:text-xs w-full"
+                            />
+                        </div>
                     </div>
-                    <div className="flex flex-col items-start mx-2 mb-2 w-full sm:w-[48%] md:w-[23%]">
-                        <label className="text-[9px] sm:text-xs font-medium text-gray-700 mb-1" htmlFor="input-4">
-                            Input 4
-                        </label>
-                        <input
-                            type="datetime-local"
-                            id="input-4"
-                            className="border border-gray-300 rounded-md p-1 text-[9px] sm:text-xs w-full"
-                        />
-                    </div>
+                )}
+            </div>
+
+           {/* Back and Submit Buttons */}
+           <div className="flex justify-between p-4 mt-auto">
+                {/* Back Button */}
+                <div className="w-24">
+                    <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-3 sm:py-2 sm:px-4 text-xs sm:text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        onClick={() => setActiveTab('characteristics')}
+                    >
+                        Back
+                    </button>
                 </div>
-            )}
-
-            
-
-            {/* Container for the button to keep it within the component */}
-            <div className="flex justify-end p-4 mt-auto">
+                {/* Submit Button */}
                 <div className="w-24">
                     <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-3 sm:py-2 sm:px-4 text-xs sm:text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                         Submit
@@ -298,6 +393,7 @@ const CountDetails = () => {
     );
 };
 
+
 const EquipmentEntry = () => {
     const [activeTab, setActiveTab] = useState('characteristics');
 
@@ -306,13 +402,13 @@ const EquipmentEntry = () => {
             {/* Tab Navigation */}
             <div className="flex mb-4 flex-wrap justify-center">
                 <button
-                    className={`p-0.5 sm:p-1 text-[10px] sm:text-xs font-medium ${activeTab === 'characteristics' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-700'} mx-0.5 sm:mx-1`}
+                    className={`p-0.5 sm:p-1 text-[10px] sm:text-xs font-medium ${activeTab === 'characteristics' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-700'} mx-1 sm:mx-2`}
                     onClick={() => setActiveTab('characteristics')}
                 >
                     Characteristics
                 </button>
                 <button
-                    className={`p-0.5 sm:p-1 text-[10px] sm:text-xs font-medium ${activeTab === 'count' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-700'} mx-0.5 sm:mx-1`}
+                    className={`p-0.5 sm:p-1 text-[10px] sm:text-xs font-medium ${activeTab === 'count' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-700'} mx-1 sm:mx-2`}
                     onClick={() => setActiveTab('count')}
                 >
                     Count
@@ -320,9 +416,14 @@ const EquipmentEntry = () => {
             </div>
 
             {/* Tab Content */}
-            {activeTab === 'characteristics' ? <EntryDetails /> : <CountDetails />}
+            {activeTab === 'characteristics' ? (
+                <EntryDetails setActiveTab={setActiveTab} />
+            ) : (
+                <CountDetails setActiveTab={setActiveTab} />
+            )}
         </div>
     );
 };
+
 
 export default EquipmentEntry;
