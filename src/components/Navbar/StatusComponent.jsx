@@ -40,7 +40,7 @@ const StatusComponent = () => {
       ${isAnimating ? 'transition-opacity duration-300 opacity-0' : 'transition-opacity duration-300 opacity-100'}`}
     >
       <img 
-        src="src/assets/images/TrackZone_Logo.webp"
+        src="TrackZone_Logo.webp"
         alt="TrackZone Logo" 
         className="w-20 h-auto mt-4 mb-2 -ml-4 sm:w-24 md:w-28 lg:w-28" 
       />
