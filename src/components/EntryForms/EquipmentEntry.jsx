@@ -38,9 +38,9 @@ const InputField = ({ label }) => {
 };
 // Entry Details Component for the Characteristics Tab
 const EntryDetails = ({ setActiveTab }) => {
-    const vehicleTypes = ["Car", "Truck", "Van", "Motorcycle"];
-    const fuelTypes = ["Gasoline", "Diesel", "Electric", "Hybrid"];
-    const transmissionTypes = ["Automatic", "Manual", "CVT", "Semi-Automatic"];
+    const vehicleTypes = [];
+    const fuelTypes = [];
+    const transmissionTypes = [];
 
     return (
         <div className="relative bg-white w-full max-w-6xl h-[100vh] flex flex-col justify-start rounded-md shadow-lg mb-8 md:w-[70%]">
@@ -60,23 +60,23 @@ const EntryDetails = ({ setActiveTab }) => {
 
             {/* Input and Dropdown Fields Below Divider */}
             <div className="flex gap-2 md:gap-20">
-                <InputField label="Equipment Name" />
+                <InputField label="Immatriculation" />
                 <InputField label="N° VIN" />
             </div>
 
             <div className="flex gap-2 md:gap-20">
-                <InputField label="Vehicle Name" />
+                <InputField label="Name" />
                 <DropdownField label="Model" options={vehicleTypes} />
             </div>
 
             <div className="flex gap-2 md:gap-20">
                 <DropdownField label="Vehicle Type" options={vehicleTypes} />
-                <DropdownField label="Billing Zone" options={vehicleTypes} />
+                <DropdownField label="Client" options={vehicleTypes} />
             </div>
 
             <div className="flex gap-2 md:gap-20">
                 <DropdownField label="Tracking Model" options={transmissionTypes} />
-                <InputField label="Fuel Tank Capacity" />
+                <InputField label="Brand" />
             </div>
 
             <div className="flex gap-2 md:gap-20">
@@ -86,7 +86,7 @@ const EntryDetails = ({ setActiveTab }) => {
 
             <div className="flex gap-2 md:gap-20">
                 <InputField label="Consumption (L/100km)" />
-                <InputField label="CO₂ Emissions (g/100km)" />
+                <InputField label="Billing Zone" />
             </div>
 
             {/* Submit Button at Bottom Right */}
@@ -173,13 +173,12 @@ const CountDetails = ({ setActiveTab }) => {
                 />
             </div>
 
-            {/* Divider Line */}
             <div className="border-t border-gray-300 my-1" />
 
             {/* Smaller Label Below Divider Line */}
             <div className="pl-4 pt-2">
                 <h3 className="text-[10px] sm:text-xs font-medium text-gray-700">
-                    History of Watch Cases
+                    Equipment Information
                 </h3>
             </div>
 

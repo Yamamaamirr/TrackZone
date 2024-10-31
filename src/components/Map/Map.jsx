@@ -11,8 +11,8 @@ const Map = () => {
     const map = new mapboxgl.Map({
       container: 'map', // container ID
       style: 'mapbox://styles/mapbox/streets-v11', // style URL
-      center: [-74.5, 40], // starting position [lng, lat]
-      zoom: 9, // starting zoom
+      center: [2.2137, 46.2276], // Centering the map on France [lng, lat]
+      zoom: 6, // Adjusted zoom for a better view of France
     });
 
     return () => map.remove(); // Cleanup on unmount
